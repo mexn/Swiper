@@ -1993,7 +1993,7 @@ s.onTouchEnd = function (e) {
 s._slideTo = function (slideIndex, speed) {
     return s.slideTo(slideIndex, speed, true, true);
 };
-s.slideTo = function (slideIndex, speed, runCallbacks, internal) {
+s.slideTo = function (slideIndex, speed, runCallbacks, internal, withoutHistoryUpdate) {
     if (typeof runCallbacks === 'undefined') runCallbacks = true;
     if (typeof slideIndex === 'undefined') slideIndex = 0;
     if (slideIndex < 0) slideIndex = 0;
@@ -2052,7 +2052,7 @@ s.slideTo = function (slideIndex, speed, runCallbacks, internal) {
     if (speed === 0 || s.browser.lteIE9) {
         s.setWrapperTranslate(translate);
         s.setWrapperTransition(0);
-        s.onTransitionEnd(runCallbacks);
+        s.onTransitionEnd(runCallbacks, withoutHistoryUpdate);
     }
     else {
         s.setWrapperTranslate(translate);
@@ -2061,7 +2061,7 @@ s.slideTo = function (slideIndex, speed, runCallbacks, internal) {
             s.animating = true;
             s.wrapper.transitionEnd(function () {
                 if (!s) return;
-                s.onTransitionEnd(runCallbacks);
+                s.onTransitionEnd(runCallbacks, withoutHistoryUpdate);
             });
         }
 
@@ -2090,7 +2090,7 @@ s.onTransitionStart = function (runCallbacks) {
 
     }
 };
-s.onTransitionEnd = function (runCallbacks) {
+s.onTransitionEnd = function (runCallbacks, withouthHistoryUpdate) {
     s.animating = false;
     s.setWrapperTransition(0);
     if (typeof runCallbacks === 'undefined') runCallbacks = true;
@@ -2107,7 +2107,7 @@ s.onTransitionEnd = function (runCallbacks) {
             }
         }
     }
-    if (s.params.history && s.history) {
+    if (s.params.history && s.history && withouthHistoryUpdate !== true) {
         s.history.setHistory(s.params.history, s.activeIndex);
     }
     if (s.params.hashnav && s.hashnav) {

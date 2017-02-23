@@ -19,9 +19,7 @@ s.history = {
     },
     setHistoryPopState: function() {
         s.history.paths = s.history.getPathValues();
-        this._historyBack = true;
-        s.history.scrollToSlide(s.params.speed, s.history.paths.value, false);
-        delete this._historyBack;
+        s.history.scrollToSlide(s.params.speed, s.history.paths.value, false, true);
     },
     getPathValues: function() {
         var pathArray = window.location.pathname.slice(1).split('/');
@@ -31,7 +29,7 @@ s.history = {
         return { key: key, value: value };
     },
     setHistory: function (key, index) {
-        if (!s.history.initialized || !s.params.history || this._historyBack) return;
+        if (!s.history.initialized || !s.params.history) return;
         var slide = s.slides.eq(index);
         var value = this.slugify(slide.attr('data-history'));
         if (!window.location.pathname.includes(key)) {
@@ -51,18 +49,18 @@ s.history = {
             .replace(/^-+/, '')
             .replace(/-+$/, '');
     },
-    scrollToSlide: function(speed, value, runCallbacks) {
+    scrollToSlide: function(speed, value, runCallbacks, withoutHistoryUpdate) {
         if (value) {
             for (var i = 0, length = s.slides.length; i < length; i++) {
                 var slide = s.slides.eq(i);
                 var slideHistory = this.slugify(slide.attr('data-history'));
                 if (slideHistory === value && !slide.hasClass(s.params.slideDuplicateClass)) {
                     var index = slide.index();
-                    s.slideTo(index, speed, runCallbacks);
+                    s.slideTo(index, speed, runCallbacks, null, withoutHistoryUpdate);
                 }
             }
         } else {
-            s.slideTo(0, speed, runCallbacks);
+            s.slideTo(0, speed, runCallbacks, null, withoutHistoryUpdate);
         }
     }
 };
