@@ -2032,7 +2032,7 @@
         s._slideTo = function (slideIndex, speed) {
             return s.slideTo(slideIndex, speed, true, true);
         };
-        s.slideTo = function (slideIndex, speed, runCallbacks, internal) {
+        s.slideTo = function (slideIndex, speed, runCallbacks, internal, withoutHistoryUpdate) {
             if (typeof runCallbacks === 'undefined') runCallbacks = true;
             if (typeof slideIndex === 'undefined') slideIndex = 0;
             if (slideIndex < 0) slideIndex = 0;
@@ -2091,7 +2091,7 @@
             if (speed === 0 || s.browser.lteIE9) {
                 s.setWrapperTranslate(translate);
                 s.setWrapperTransition(0);
-                s.onTransitionEnd(runCallbacks);
+                s.onTransitionEnd(runCallbacks, withoutHistoryUpdate);
             }
             else {
                 s.setWrapperTranslate(translate);
@@ -2100,7 +2100,7 @@
                     s.animating = true;
                     s.wrapper.transitionEnd(function () {
                         if (!s) return;
-                        s.onTransitionEnd(runCallbacks);
+                        s.onTransitionEnd(runCallbacks, withoutHistoryUpdate);
                     });
                 }
         
@@ -2129,7 +2129,7 @@
         
             }
         };
-        s.onTransitionEnd = function (runCallbacks) {
+        s.onTransitionEnd = function (runCallbacks, withouthHistoryUpdate) {
             s.animating = false;
             s.setWrapperTransition(0);
             if (typeof runCallbacks === 'undefined') runCallbacks = true;
@@ -2146,7 +2146,7 @@
                     }
                 }
             }
-            if (s.params.history && s.history) {
+            if (s.params.history && s.history && withouthHistoryUpdate !== true) {
                 s.history.setHistory(s.params.history, s.activeIndex);
             }
             if (s.params.hashnav && s.hashnav) {
@@ -3289,9 +3289,7 @@
             },
             setHistoryPopState: function() {
                 s.history.paths = s.history.getPathValues();
-                this._historyBack = true;
-                s.history.scrollToSlide(s.params.speed, s.history.paths.value, false);
-                delete this._historyBack;
+                s.history.scrollToSlide(s.params.speed, s.history.paths.value, false, true);
             },
             getPathValues: function() {
                 var pathArray = window.location.pathname.slice(1).split('/');
@@ -3301,7 +3299,7 @@
                 return { key: key, value: value };
             },
             setHistory: function (key, index) {
-                if (!s.history.initialized || !s.params.history || this._historyBack) return;
+                if (!s.history.initialized || !s.params.history) return;
                 var slide = s.slides.eq(index);
                 var value = this.slugify(slide.attr('data-history'));
                 if (!window.location.pathname.includes(key)) {
@@ -3321,18 +3319,18 @@
                     .replace(/^-+/, '')
                     .replace(/-+$/, '');
             },
-            scrollToSlide: function(speed, value, runCallbacks) {
+            scrollToSlide: function(speed, value, runCallbacks, withoutHistoryUpdate) {
                 if (value) {
                     for (var i = 0, length = s.slides.length; i < length; i++) {
                         var slide = s.slides.eq(i);
                         var slideHistory = this.slugify(slide.attr('data-history'));
                         if (slideHistory === value && !slide.hasClass(s.params.slideDuplicateClass)) {
                             var index = slide.index();
-                            s.slideTo(index, speed, runCallbacks);
+                            s.slideTo(index, speed, runCallbacks, null, withoutHistoryUpdate);
                         }
                     }
                 } else {
-                    s.slideTo(0, speed, runCallbacks);
+                    s.slideTo(0, speed, runCallbacks, null, withoutHistoryUpdate);
                 }
             }
         };
