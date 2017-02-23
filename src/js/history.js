@@ -19,7 +19,7 @@ s.history = {
     },
     setHistoryPopState: function() {
         s.history.paths = s.history.getPathValues();
-        s.history.scrollToSlide(s.params.speed, s.history.paths.value, false);
+        s.history.scrollToSlide(s.params.speed, s.history.paths.value, false, true);
     },
     getPathValues: function() {
         var pathArray = window.location.pathname.slice(1).split('/');
@@ -49,18 +49,18 @@ s.history = {
             .replace(/^-+/, '')
             .replace(/-+$/, '');
     },
-    scrollToSlide: function(speed, value, runCallbacks) {
+    scrollToSlide: function(speed, value, runCallbacks, withoutHistoryUpdate) {
         if (value) {
             for (var i = 0, length = s.slides.length; i < length; i++) {
                 var slide = s.slides.eq(i);
                 var slideHistory = this.slugify(slide.attr('data-history'));
                 if (slideHistory === value && !slide.hasClass(s.params.slideDuplicateClass)) {
                     var index = slide.index();
-                    s.slideTo(index, speed, runCallbacks);
+                    s.slideTo(index, speed, runCallbacks, null, withoutHistoryUpdate);
                 }
             }
         } else {
-            s.slideTo(0, speed, runCallbacks);
+            s.slideTo(0, speed, runCallbacks, null, withoutHistoryUpdate);
         }
     }
 };
