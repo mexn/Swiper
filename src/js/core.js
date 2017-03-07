@@ -72,6 +72,7 @@ var defaults = {
     hashnavWatchState: false,
     // History
     history: false,
+    trailingSlash: false,
     // Commong Nav State
     replaceState: false,
     // Breakpoints
