@@ -10,7 +10,7 @@
  * 
  * Licensed under MIT
  * 
- * Released on: February 23, 2017
+ * Released on: March 7, 2017
  */
         (function (root, factory) {
         	'use strict';
@@ -111,6 +111,7 @@
             hashnavWatchState: false,
             // History
             history: false,
+            trailingSlash: false,
             // Commong Nav State
             replaceState: false,
             // Breakpoints
@@ -3303,7 +3304,9 @@
                 var slide = s.slides.eq(index);
                 var value = this.slugify(slide.attr('data-history'));
                 if (!window.location.pathname.includes(key)) {
-                    value = key + '/' + value;
+                    value = key + '/' + value + (s.params.trailingSslash ? '/' : '');
+                } else if (s.params.trailingSlash) {
+                    value = '/' + key + '/' + value + '/';
                 }
                 if (s.params.replaceState) {
                     window.history.replaceState(null, null, value);
