@@ -22,7 +22,7 @@ s.history = {
         s.history.scrollToSlide(s.params.speed, s.history.paths.value, false, true);
     },
     getPathValues: function() {
-        var pathArray = window.location.pathname.slice(1).split('/');
+        var pathArray = window.location.pathname.split('/').filter(function(p) { return !!p; });
         var total = pathArray.length;
         var key = pathArray[total - 2];
         var value = pathArray[total - 1];
