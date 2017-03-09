@@ -3302,9 +3302,6 @@
                 } else {
                     window.history.pushState(null, null, value);
                 }
-                if (slide.attr('data-title')) {
-                    window.document.title = slide.attr('data-title');
-                }
             },
             slugify: function(text) {
                 return text.toString().toLowerCase()
@@ -3322,10 +3319,17 @@
                         if (slideHistory === value && !slide.hasClass(s.params.slideDuplicateClass)) {
                             var index = slide.index();
                             s.slideTo(index, speed, runCallbacks, null, withoutHistoryUpdate);
+                            if (slide.attr('data-title')) {
+                                window.document.title = slide.attr('data-title');
+                            }
                         }
                     }
                 } else {
                     s.slideTo(0, speed, runCallbacks, null, withoutHistoryUpdate);
+                    var initialSlide = s.slides.eq(0);
+                    if (initialSlide.attr('data-title')) {
+                        window.document.title = initialSlide.attr('data-title');
+                    }
                 }
             }
         };
