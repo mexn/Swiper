@@ -10,7 +10,7 @@
  * 
  * Licensed under MIT
  * 
- * Released on: March 7, 2017
+ * Released on: March 9, 2017
  */
         (function (root, factory) {
         	'use strict';
@@ -3316,6 +3316,9 @@
                     window.history.replaceState(null, null, value);
                 } else {
                     window.history.pushState(null, null, value);
+                }
+                if (slide.attr('data-title')) {
+                    window.document.title = slide.attr('data-title');
                 }
             },
             slugify: function(text) {
