@@ -42,6 +42,9 @@ s.history = {
         } else {
             window.history.pushState(null, null, value);
         }
+        if (slide.attr('data-title')) {
+            window.document.title = slide.attr('data-title');
+        }
     },
     slugify: function(text) {
         return text.toString().toLowerCase()
