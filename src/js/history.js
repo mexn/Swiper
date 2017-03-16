@@ -33,7 +33,10 @@ s.history = {
         var slide = s.slides.eq(index);
         var value = this.slugify(slide.attr('data-history'));
         if (!window.location.pathname.includes(key)) {
-            value = key + '/' + value + (s.params.trailingSslash ? '/' : '');
+            var key_ = key.split('/').filter(function(k) {
+                return k && !window.location.pathname.includes(k);
+            });
+            value = key_.join('/') + '/' + value + (s.params.trailingSslash ? '/' : '');
         } else if (s.params.trailingSlash) {
             value = '/' + key + '/' + value + '/';
         }
