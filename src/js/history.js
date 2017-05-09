@@ -36,7 +36,7 @@ s.history = {
             var key_ = key.split('/').filter(function(k) {
                 return k && !window.location.pathname.includes(k);
             });
-            value = key_.join('/') + '/' + value + (s.params.trailingSslash ? '/' : '');
+            value = key_.join('/') + '/' + value + (s.params.trailingSlash ? '/' : '');
         } else if (s.params.trailingSlash) {
             value = '/' + key + '/' + value + '/';
         }
