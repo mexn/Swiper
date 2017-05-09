@@ -818,7 +818,7 @@ s.updateSlidesSize = function () {
 
         if (s.params.centeredSlides) {
             slidePosition = slidePosition + slideSize / 2 + prevSlideSize / 2 + spaceBetween;
-            if(prevSlideSize == 0 && i !== 0) slidePosition = slidePosition - s.size / 2 - spaceBetween;
+            if(prevSlideSize === 0 && i !== 0) slidePosition = slidePosition - s.size / 2 - spaceBetween;
             if (i === 0) slidePosition = slidePosition - s.size / 2 - spaceBetween;
             if (Math.abs(slidePosition) < 1 / 1000) slidePosition = 0;
             if ((index) % s.params.slidesPerGroup === 0) s.snapGrid.push(slidePosition);
@@ -1208,6 +1208,7 @@ s.update = function (updateTranslate) {
     if (s.params.scrollbar && s.scrollbar) {
         s.scrollbar.set();
     }
+    var newTranslate;
     function forceSetTranslate() {
         var translate = s.rtl ? -s.translate : s.translate;
         newTranslate = Math.min(Math.max(s.translate, s.maxTranslate()), s.minTranslate());
@@ -1216,7 +1217,7 @@ s.update = function (updateTranslate) {
         s.updateClasses();
     }
     if (updateTranslate) {
-        var translated, newTranslate;
+        var translated;
         if (s.controller && s.controller.spline) {
             s.controller.spline = undefined;
         }
@@ -1247,6 +1248,8 @@ s.update = function (updateTranslate) {
   Resize Handler
   ===========================*/
 s.onResize = function (forceUpdatePagination) {
+    if (s.container[0] && s.container[0].offsetWidth === 0) return;
+
     if (s.params.onBeforeResize) s.params.onBeforeResize(s);
     //Breakpoints
     if (s.params.breakpoints) {
@@ -1622,7 +1625,7 @@ s.onTouchMove = function (e) {
     if (isScrolling) {
         s.emit('onTouchMoveOpposite', s, e);
     }
-    if (typeof startMoving === 'undefined' && s.browser.ieTouch) {
+    if (typeof startMoving === 'undefined') {
         if (s.touches.currentX !== s.touches.startX || s.touches.currentY !== s.touches.startY) {
             startMoving = true;
         }
@@ -1632,7 +1635,7 @@ s.onTouchMove = function (e) {
         isTouched = false;
         return;
     }
-    if (!startMoving && s.browser.ieTouch) {
+    if (!startMoving) {
         return;
     }
     s.allowClick = false;
